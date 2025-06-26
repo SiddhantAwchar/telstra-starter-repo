@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SIM Card Activation</title>
+</head>
+<body>
+  <h2>Activate SIM Card</h2>
+  <form id="simForm">
+    <label for="simId">SIM ICCID:</label><br>
+    <input type="text" id="simId" name="simId" required><br><br>
+
+    <label for="customer">Customer Email:</label><br>
+    <input type="email" id="customer" name="customer" required><br><br>
+
+    <button type="submit">Activate</button>
+  </form>
+
+  <h3>Response:</h3>
+  <pre id="responseBox"></pre>
+
+  <script>
+    document.getElementById("simForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const simId = document.getElementById("simId").value;
+      const customer = document.getElementById("customer").value;
+
+      const response = await fetch("/activate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          iccid: simId,
+          customerEmail: customer
+        })
+      });
+
+      const data = await response.json();
+      document.getElementById("responseBox").textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>
